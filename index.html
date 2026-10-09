@@ -804,11 +804,12 @@
             mudarAba(null, 'pedidos');
         }
 
-        function confirmarEPagar() {
+function confirmarEPagar() {
             const botao = document.querySelector('#modal-checkout .btn-finalizar');
             botao.innerText = "A processar...";
             botao.disabled = true;
 
+            // 1. Atualiza e salva os dados no LocalStorage
             dadosUsuario.nome = document.getElementById('check-nome').value;
             dadosUsuario.email = document.getElementById('check-email').value;
             dadosUsuario.telefone = document.getElementById('check-telefone').value;
@@ -821,24 +822,38 @@
                 else itensAgrupados[item.id] = { id: item.id, quantidade: 1, preco: item.preco };
             });
 
-            fetch('https://api-cafeteria-gourmet.onrender.com/pedidos', {
+            // 2. Primeiro Passo: Sincronizar o Cliente (Procurar ou Cadastrar)
+            fetch('https://api-cafeteria-gourmet.onrender.com/clientes/sync', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cliente_id: 1, itens: Object.values(itensAgrupados) }) 
+                body: JSON.stringify(dadosUsuario)
             })
             .then(response => {
-                if (!response.ok) throw new Error("Erro no banco");
+                if (!response.ok) throw new Error("Erro ao sincronizar dados do cliente");
+                return response.json();
+            })
+            .then(dataCliente => {
+                // 3. Segundo Passo: Enviar o pedido com o ID REAL do cliente
+                return fetch('https://api-cafeteria-gourmet.onrender.com/pedidos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        cliente_id: dataCliente.cliente_id, 
+                        itens: Object.values(itensAgrupados) 
+                    }) 
+                });
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Erro ao gravar pedido no banco");
                 return response.json();
             })
             .then(data => {
-                mostrarToast(`Pedido #${data.pedido_id} recebido com sucesso!`);
+                mostrarToast(`Pedido #${data.pedido_id} processado com sucesso!`);
                 processarSucessoPedido(data.pedido_id);
             })
             .catch(error => {
-                console.warn("API bloqueou a inserção. Simulando aprovação no front-end.");
-                const idSimulado = Math.floor(Math.random() * 9000) + 1000;
-                mostrarToast(`Pedido #${idSimulado} processado!`);
-                processarSucessoPedido(idSimulado);
+                console.error(error);
+                mostrarToast("Ocorreu um erro. Verifique a conexão com a API.", true);
             })
             .finally(() => {
                 botao.innerText = "Confirmar e Pagar";
