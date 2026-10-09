@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -15,8 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Chave de acesso direta à base de dados na nuvem (Neon.tech)
-NEON_URL = "postgresql://neondb_owner:npg_xgLw6c2DMOWG@ep-restless-river-b4nkwevg-pooler.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require"
+NEON_URL = os.getenv("DATABASE_URL")
 
 def get_db_connection():
     try:
