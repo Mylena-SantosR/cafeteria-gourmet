@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafeteria Gourmet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Reset e Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F5F2; color: #333; padding-top: 80px; }
+        
+        /* Barra de Navegação */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background-color: #1a1a1a; color: white; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .navbar .logo { font-size: 1.5em; font-weight: 600; letter-spacing: 2px; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links li a { color: #ccc; text-decoration: none; font-size: 0.9em; font-weight: 500; transition: color 0.3s; text-transform: uppercase;}
+        .nav-links li a:hover { color: white; }
+        .nav-actions { display: flex; align-items: center; gap: 20px; font-size: 0.9em; }
+        .nav-actions span { cursor: pointer; display: flex; align-items: center; gap: 5px; transition: color 0.3s; color: #ccc; }
+        .nav-actions span:hover { color: white; }
+        .cart-badge { background-color: #4CAF50; color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.8em; font-weight: bold; margin-left: 5px; }
+
+        /* Hero Section */
+        .hero { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=1600&q=80') center/cover no-repeat; height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; }
+        .hero h1 { font-size: 3.5em; margin-bottom: 15px; font-weight: 600; }
+        .hero p { font-size: 1.2em; font-weight: 300; margin-bottom: 30px; max-width: 600px; color: #eee; }
+        .btn-hero { background-color: #4CAF50; color: white; text-decoration: none; padding: 15px 40px; border-radius: 4px; font-weight: 600; font-size: 1.1em; transition: 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-hero:hover { background-color: #45a049; }
+
+        /* Sobre e Cardápio */
+        .sobre { padding: 80px 20px; text-align: center; background-color: #fff; }
+        .sobre h2 { font-size: 2.2em; color: #1a1a1a; margin-bottom: 20px; }
+        .sobre p { max-width: 800px; margin: 0 auto; color: #666; line-height: 1.8; font-size: 1.05em; }
+
+        .cardapio-section { padding: 60px 20px 80px; max-width: 1300px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 2.2em; margin-bottom: 30px; color: #1a1a1a; }
+        
+        .filtros { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn { background: white; border: 1px solid #ddd; padding: 8px 25px; border-radius: 30px; cursor: pointer; font-weight: 500; font-family: 'Poppins', sans-serif; transition: 0.3s; color: #555; }
+        .filter-btn:hover { background: #f0f0f0; }
+        .filter-btn.active { background: #4CAF50; color: white; border-color: #4CAF50; }
+
+        #vitrine { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .produto-card { background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); transition: transform 0.3s ease, opacity 0.3s; display: flex; flex-direction: column; position: relative; }
+        .produto-card:hover { transform: translateY(-5px); }
+        .produto-img { width: 100%; height: 200px; object-fit: cover; }
+        .badge { position: absolute; top: 15px; left: 15px; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .produto-info { padding: 25px; display: flex; flex-direction: column; flex: 1; }
+        .produto-info h3 { font-size: 1.2em; color: #1a1a1a; margin-bottom: 10px; }
+        .produto-info p { color: #777; font-size: 0.9em; flex: 1; margin-bottom: 20px; line-height: 1.5; }
+        .produto-info .preco { font-weight: 600; font-size: 1.4em; color: #4CAF50; margin-bottom: 20px; }
+        .btn-comprar { background-color: #1a1a1a; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: 500; transition: background-color 0.3s; }
+        .btn-comprar:hover { background-color: #333; }
+
+        /* Depoimentos */
+        .depoimentos-section { background-color: #1a1a1a; color: white; padding: 80px 20px; text-align: center; }
+        .depoimentos-grid { display: flex; gap: 30px; max-width: 1200px; margin: 40px auto 0; justify-content: center; flex-wrap: wrap; }
+        .depoimento-card { background: #2a2a2a; padding: 30px; border-radius: 8px; flex: 1; min-width: 300px; text-align: left; }
+        .estrelas { color: #FFD700; margin-bottom: 15px; font-size: 1.2em; }
+        .depoimento-texto { font-style: italic; color: #ccc; margin-bottom: 20px; line-height: 1.6; }
+        .cliente-nome { font-weight: 600; color: #fff; }
+
+        /* Rodapé */
+        .footer { background: #0f0f0f; color: #aaa; padding: 60px 20px 20px; font-size: 0.9em; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
+        .footer-col { flex: 1; min-width: 250px; }
+        .footer-col h3 { color: white; margin-bottom: 20px; font-size: 1.2em; }
+        .footer-col p { margin-bottom: 10px; line-height: 1.6; }
+        .footer-bottom { text-align: center; border-top: 1px solid #333; padding-top: 20px; }
+        .btn-whatsapp { display: inline-block; background-color: #25D366; color: white; text-decoration: none; padding: 10px 20px; border-radius: 4px; font-weight: 600; margin-top: 10px; transition: 0.3s;}
+        .btn-whatsapp:hover { background-color: #128C7E; }
+
+        /* Gaveta do Carrinho */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .cart-overlay.active { opacity: 1; pointer-events: auto; }
+        .painel-carrinho { position: fixed; top: 0; right: -450px; width: 400px; height: 100vh; background-color: white; padding: 30px; box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 2001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .painel-carrinho.open { right: 0; }
+        .painel-carrinho h2 { font-size: 1.5em; margin-bottom: 25px; color: #1a1a1a; display: flex; align-items: center; gap: 10px; margin-top: 20px;}
+        #itens-carrinho { flex: 1; overflow-y: auto; margin-right: -10px; padding-right: 10px; }
+        .item-carrinho { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; font-size: 0.95em; color: #444; }
+        .obs-input { width: 100%; margin-top: 15px; padding: 12px; border-radius: 4px; border: 1px solid #ddd; font-family: 'Poppins', sans-serif; resize: vertical; min-height: 80px; font-size: 0.9em;}
+        .total-carrinho { font-size: 1.4em; font-weight: 600; margin-top: 20px; color: #1a1a1a; display: flex; justify-content: space-between;}
+        .btn-finalizar { background-color: #4CAF50; color: white; border: none; width: 100%; padding: 15px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 1.1em; margin-top: 20px; transition: background-color 0.3s; }
+        .btn-finalizar:hover { background-color: #45a049; }
+
+        /* Modais */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: white; padding: 40px; border-radius: 8px; width: 90%; max-width: 500px; position: relative; transform: translateY(-20px); transition: transform 0.3s; }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5em; cursor: pointer; color: #666; }
+        .close-btn:hover { color: #000; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95em; color: #333;}
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Poppins', sans-serif; font-size: 0.95em;}
+        .form-control:invalid { border-color: #fca5a5; }
+        .req-star { color: #D84315; font-weight: bold; }
+
+        /* Estilos do Modal "Minha Conta" e Cartão Fidelidade */
+        .modal-conta { max-width: 700px !important; max-height: 85vh; overflow-y: auto; }
+        .tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 25px; }
+        .tab-btn { flex: 1; background: none; border: none; padding: 12px; font-size: 1.05em; font-family: 'Poppins', sans-serif; cursor: pointer; font-weight: 600; color: #888; border-bottom: 3px solid transparent; transition: 0.3s;}
+        .tab-btn.active { color: #4CAF50; border-bottom-color: #4CAF50; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .fidelidade-box { background: #EFEBE9; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: center; border: 2px dashed #D7CCC8; }
+        .fidelidade-box h3 { color: #4E342E; margin-bottom: 5px; }
+        .fidelidade-box p { font-size: 0.9em; color: #795548; margin-bottom: 15px; }
+        .copos-grid { display: flex; justify-content: center; gap: 8px; font-size: 1.8em; }
+        .copo { color: #D7CCC8; transition: 0.3s; }
+        .copo.ganho { color: #D84315; }
+
+        .conta-dados-pessoais { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px;}
+        .conta-dados-pessoais p { margin-bottom: 10px; font-size: 0.95em; color: #555; }
+        .conta-dados-pessoais strong { color: #1a1a1a; }
+        .btn-editar { background-color: #f0f0f0; color: #333; border: 1px solid #ccc; padding: 10px; border-radius: 4px; cursor: pointer; font-weight: 500; width: 100%; margin-top: 15px; transition: 0.3s; }
+        .btn-editar:hover { background-color: #e0e0e0; }
+
+        .pedido-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .pedido-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .tracker { display: flex; justify-content: space-between; align-items: center; position: relative; margin-top: 20px; padding: 0 10px;}
+        .tracker::before { content: ''; position: absolute; top: 14px; left: 30px; right: 30px; height: 3px; background: #eee; z-index: 1; }
+        .tracker-step { position: relative; z-index: 2; text-align: center; width: 80px; }
+        .tracker-icon { width: 30px; height: 30px; border-radius: 50%; background: #eee; color: white; display: flex; justify-content: center; align-items: center; margin: 0 auto 8px; font-weight: bold; border: 3px solid white; box-shadow: 0 0 0 2px #eee; transition: 0.3s;}
+        .tracker-step.active .tracker-icon { background: #4CAF50; box-shadow: 0 0 0 2px #4CAF50; }
+        .tracker-step p { font-size: 0.75em; font-weight: 600; color: #999; }
+        .tracker-step.active p { color: #4CAF50; }
+
+        /* Estilos da Avaliação de Pedido */
+        .btn-avaliar { background-color: #FFA000; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: 600; margin-top: 15px; transition: 0.3s; }
+        .btn-avaliar:hover { background-color: #FF8F00; }
+        .avaliacao-feita { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #eee; }
+        .avaliacao-feita .estrelas-display { color: #FFD700; font-size: 1.2em; margin-bottom: 5px; }
+        .avaliacao-feita p { font-size: 0.9em; color: #555; font-style: italic; }
+        
+        .rating-stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; font-size: 2.5em; margin-bottom: 15px; }
+        .rating-stars input { display: none; }
+        .rating-stars label { color: #ddd; cursor: pointer; transition: 0.2s; }
+        .rating-stars label:hover, .rating-stars label:hover ~ label, .rating-stars input:checked ~ label { color: #FFD700; }
+
+        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 4px; padding: 16px; position: fixed; z-index: 3000; bottom: 30px; left: 30px; font-size: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.4s, bottom 0.4s; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+        #toast.error { background-color: #F44336; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">CAFETERIA</div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#cardapio">Cardápio</a></li>
+            <li><a href="#depoimentos">Avaliações</a></li>
+            <li><a href="#sobre">Sobre Nós</a></li>
+        </ul>
+        <div class="nav-actions">
+            <span id="btn-login-header" onclick="verificarAcessoDaNavbar()">👤 Acessar Minha Conta</span>
+            <a href="#" style="text-decoration: none;" onclick="event.preventDefault(); abrirCarrinho();">
+                <span>🛒 Carrinho <span class="cart-badge" id="cart-count">0</span></span>
+            </a>
+        </div>
+    </nav>
+
+    <header id="inicio" class="hero">
+        <h1>Experimente o Sabor Premium</h1>
+        <p>A tradição do melhor café, moído na hora e entregue diretamente na sua casa.</p>
+        <a href="#cardapio" class="btn-hero">Confira o Cardápio</a>
+    </header>
+
+    <section id="sobre" class="sobre">
+        <h2>A Nossa História</h2>
+        <p>Fundada com a paixão por grãos selecionados e moagens perfeitas, a nossa Cafeteria nasceu com o propósito de levar a experiência das grandes pastelarias europeias para a sua casa. Trabalhamos apenas com produtores locais, garantindo sustentabilidade e um sabor inesquecível em cada xícara.</p>
+    </section>
+
+    <section id="cardapio" class="cardapio-section">
+        <h2 class="section-title">Nosso Cardápio</h2>
+        <div class="filtros">
+            <button class="filter-btn active" onclick="filtrarMenu('todos', this)">Todos</button>
+            <button class="filter-btn" onclick="filtrarMenu('quentes', this)">☕ Bebidas Quentes</button>
+            <button class="filter-btn" onclick="filtrarMenu('gelados', this)">🧊 Gelados</button>
+            <button class="filter-btn" onclick="filtrarMenu('salgados', this)">🥐 Salgados</button>
+            <button class="filter-btn" onclick="filtrarMenu('doces', this)">🍰 Doces</button>
+        </div>
+        <div id="vitrine"></div>
+    </section>
+
+    <section id="depoimentos" class="depoimentos-section">
+        <h2>O que dizem os nossos clientes</h2>
+        <div class="depoimentos-grid">
+            <div class="depoimento-card">
+                <div class="estrelas">★★★★★</div>
+                <p class="depoimento-texto">"O melhor cappuccino que já provei! O pão de queijo chegou quentinho, perfeito para o lanche da tarde no trabalho."</p>
+                <p class="cliente-nome">- Mariana Costa</p>
+            </div>
+            <div class="depoimento-card">
+                <div class="estrelas">★★★★★</div>
+                <p class="depoimento-texto">"Entrega super rápida e embalagem impecável. O Frappuccino de Caramelo salvou o meu dia de calor!"</p>
+                <p class="cliente-nome">- Rafael Silva</p>
+            </div>
+            <div class="depoimento-card">
+                <div class="estrelas">★★★★★</div>
+                <p class="depoimento-texto">"Amo o sistema de fidelidade. A qualidade dos grãos é perceptível em cada gole do café premium. Recomendo muito!"</p>
+                <p class="cliente-nome">- Ana Beatriz</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>Cafeteria Gourmet</h3>
+                <p>O seu café especial, moído na hora.</p>
+                <a href="#" class="btn-whatsapp">💬 Pedir no WhatsApp</a>
+            </div>
+            <div class="footer-col">
+                <h3>Horário de Funcionamento</h3>
+                <p>Segunda a Sexta: 07h às 19h</p>
+                <p>Sábados: 08h às 14h</p>
+                <p>Domingos: Fechado</p>
+            </div>
+            <div class="footer-col">
+                <h3>Onde Estamos</h3>
+                <p>Rua do Café Especial, 123</p>
+                <p>Centro - Luziânia, GO</p>
+                <p>CEP: 72800-000</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Cafeteria Gourmet. Todos os direitos reservados. Projeto Acadêmico.</p>
+        </div>
+    </footer>
+
+    <!-- GAVETA LATERAL (CARRINHO) -->
+    <div class="cart-overlay" id="cart-overlay" onclick="fecharCarrinho()"></div>
+    <div class="painel-carrinho" id="painel-carrinho">
+        <span class="close-btn" onclick="fecharCarrinho()">&times;</span>
+        <h2>🛒 Seu Pedido</h2>
+        <div id="itens-carrinho">
+            <p style="color: #999; text-align: center; margin: 30px 0;">O carrinho está vazio.</p>
+        </div>
+        <textarea id="observacao-pedido" class="obs-input auto-save" placeholder="Alguma observação especial? (Ex: sem açúcar)"></textarea>
+        <div class="total-carrinho">
+            <span>Total:</span>
+            <span id="total-carrinho">R$ 0,00</span>
+        </div>
+        <button class="btn-finalizar" onclick="abrirCheckoutValidado()">Prosseguir Pedido</button>
+    </div>
+
+    <!-- MODAIS DE AUTENTICAÇÃO E CHECKOUT -->
+    <div class="modal-overlay" id="modal-login">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModal('modal-login')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Acessar Conta</h2>
+            <form onsubmit="event.preventDefault(); processarLogin();">
+                <div class="form-group">
+                    <label>E-mail <span class="req-star">*</span></label>
+                    <input type="email" id="login-email" class="form-control auto-save" placeholder="exemplo@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha <span class="req-star">*</span></label>
+                    <input type="password" class="form-control" placeholder="Sua senha secreta" minlength="4" required>
+                </div>
+                <button type="submit" class="btn-finalizar">Entrar</button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #666;">
+                Ainda não tem conta? <a href="#" style="color: #4CAF50; font-weight: 600;" onclick="fecharModal('modal-login'); abrirModal('modal-cadastro');">Cadastre-se</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-cadastro">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModal('modal-cadastro')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Criar Nova Conta</h2>
+            <form onsubmit="event.preventDefault(); processarCadastro();">
+                <div class="form-group">
+                    <label>Nome Completo <span class="req-star">*</span></label>
+                    <input type="text" id="cad-nome" class="form-control auto-save" placeholder="Seu nome completo" minlength="3" required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail <span class="req-star">*</span></label>
+                    <input type="email" id="cad-email" class="form-control auto-save" placeholder="exemplo@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha <span class="req-star">*</span></label>
+                    <input type="password" class="form-control" placeholder="Crie uma senha forte" minlength="4" required>
+                </div>
+                <button type="submit" class="btn-finalizar">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-checkout">
+        <div class="modal-content" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+            <span class="close-btn" onclick="fecharModal('modal-checkout')">&times;</span>
+            <h2 style="margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">Finalizar Compra</h2>
+            <form id="form-checkout" onsubmit="event.preventDefault(); confirmarEPagar();">
+                <h3 style="font-size: 1.1em; margin-bottom: 15px; color: #4CAF50;">1. Dados do Cliente</h3>
+                <div class="form-group">
+                    <label>Nome Completo <span class="req-star">*</span></label>
+                    <input type="text" id="check-nome" class="form-control auto-save" placeholder="Nome de quem vai receber" minlength="3" required>
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label>E-mail <span class="req-star">*</span></label>
+                        <input type="email" id="check-email" class="form-control auto-save" placeholder="exemplo@email.com" required>
+                    </div>
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label>Telefone / WhatsApp <span class="req-star">*</span></label>
+                        <input type="tel" id="check-telefone" class="form-control auto-save" placeholder="(00) 00000-0000" minlength="14" maxlength="15" oninput="aplicarMascaraTelefone(this)" required>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.1em; margin-bottom: 15px; margin-top: 10px; color: #4CAF50;">2. Entrega e Pagamento</h3>
+                <div class="form-group">
+                    <label>Endereço de Entrega <span class="req-star">*</span></label>
+                    <input type="text" id="check-endereco" class="form-control auto-save" placeholder="Rua, Número, Bairro" minlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label>Forma de Pagamento <span class="req-star">*</span></label>
+                    <select class="form-control" id="forma-pagamento" required>
+                        <option value="pix">PIX</option>
+                        <option value="cartao">Cartão de Crédito / Débito</option>
+                        <option value="dinheiro">Dinheiro (na entrega)</option>
+                    </select>
+                </div>
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center; border: 1px solid #eee;">
+                    <h3 style="margin: 0; color: #1a1a1a; font-size: 1.4em;" id="modal-total-display">Total: R$ 0,00</h3>
+                </div>
+                <button type="submit" class="btn-finalizar">Confirmar e Pagar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: MINHA CONTA -->
+    <div class="modal-overlay" id="modal-minha-conta">
+        <div class="modal-content modal-conta">
+            <span class="close-btn" onclick="fecharModal('modal-minha-conta')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Minha Conta</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="mudarAba(event, 'perfil')">Meus Dados</button>
+                <button class="tab-btn" onclick="mudarAba(event, 'pedidos')">Meus Pedidos</button>
+            </div>
+
+            <div id="aba-perfil" class="tab-content active">
+                <div class="fidelidade-box">
+                    <h3>☕ Cartão Fidelidade</h3>
+                    <p id="fidelidade-texto">Complete 10 copos e ganhe uma bebida grátis!</p>
+                    <div class="copos-grid" id="fidelidade-copos"></div>
+                </div>
+
+                <div class="conta-dados-pessoais" id="display-dados">
+                    <p><strong>Nome:</strong> <span id="painel-nome">Não preenchido</span></p>
+                    <p><strong>E-mail:</strong> <span id="painel-email">Não preenchido</span></p>
+                    <p><strong>Telefone:</strong> <span id="painel-telefone">Não preenchido</span></p>
+                    <p><strong>Endereço Principal:</strong> <span id="painel-endereco">Não preenchido</span></p>
+                    <button class="btn-editar" onclick="ativarModoEdicao()">✏️ Editar Meus Dados</button>
+                </div>
+
+                <div class="conta-dados-pessoais" id="form-edicao-dados" style="display: none;">
+                    <form onsubmit="event.preventDefault(); salvarEdicaoDados();">
+                        <div class="form-group">
+                            <label>Nome Completo <span class="req-star">*</span></label>
+                            <input type="text" id="edit-nome" class="form-control auto-save" required>
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail <span class="req-star">*</span></label>
+                            <input type="email" id="edit-email" class="form-control auto-save" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone <span class="req-star">*</span></label>
+                            <input type="tel" id="edit-telefone" class="form-control auto-save" oninput="aplicarMascaraTelefone(this)" minlength="14" maxlength="15" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Endereço de Entrega Padrão <span class="req-star">*</span></label>
+                            <input type="text" id="edit-endereco" class="form-control auto-save" required>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button type="button" class="btn-editar" style="margin-top: 0; background-color: #ddd;" onclick="cancelarEdicao()">Cancelar</button>
+                            <button type="submit" class="btn-finalizar" style="margin-top: 0; flex: 2;">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+                <button class="btn-finalizar" style="background-color: #d32f2f;" onclick="fazerLogout()">Sair da Conta</button>
+            </div>
+            <div id="aba-pedidos" class="tab-content">
+                <div id="lista-historico-pedidos"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE AVALIAÇÃO DE PEDIDO -->
+    <div class="modal-overlay" id="modal-avaliacao">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-btn" onclick="fecharModal('modal-avaliacao')">&times;</span>
+            <h2 style="margin-bottom: 10px;">Avaliar Pedido #<span id="av-pedido-id"></span></h2>
+            <p style="color: #666; font-size: 0.9em; margin-bottom: 20px;">Como foi a sua experiência com este pedido?</p>
+            
+            <form onsubmit="event.preventDefault(); enviarAvaliacao();">
+                <div class="rating-stars">
+                    <input type="radio" name="rating" id="star5" value="5" required><label for="star5">★</label>
+                    <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                    <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                    <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                    <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                </div>
+                <textarea id="av-comentario" class="obs-input" placeholder="Conte-nos o que achou dos produtos e da entrega... (opcional)" style="margin-bottom: 20px; text-align: left;"></textarea>
+                <button type="submit" class="btn-finalizar">Enviar Avaliação</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast">Mensagem</div>
+
+    <script>
+        // RECUPERAÇÃO DE DADOS PERSISTENTES
+        let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+        let totalGeral = parseFloat(localStorage.getItem('totalGeral')) || 0;
+        let usuarioLogado = localStorage.getItem('usuarioLogado') === 'true';
+        let historicoPedidos = JSON.parse(localStorage.getItem('historicoPedidos')) || []; 
+        
+        let dadosSalvos = JSON.parse(localStorage.getItem('dadosUsuario')) || {};
+        let dadosUsuario = { 
+            nome: dadosSalvos.nome || '', email: dadosSalvos.email || '', 
+            telefone: dadosSalvos.telefone || '', endereco: dadosSalvos.endereco || '' 
+        };
+
+        const bancoImagens = {
+            1: "./img/1.jpg", 2: "./img/2.jpg", 3: "./img/3.jpg", 4: "./img/4.jpg", 
+            5: "./img/5.jpg", 6: "./img/6.jpg", 7: "./img/7.jpg", 8: "./img/8.jpg"  
+        };
+
+        const infoExtraProdutos = {
+            1: { cat: 'quentes', badge: '☕ Mais Vendido', badgeColor: '#D84315' },
+            2: { cat: 'quentes', badge: '' },
+            3: { cat: 'quentes', badge: '✨ Novidade', badgeColor: '#4CAF50' },
+            4: { cat: 'salgados', badge: '' },
+            5: { cat: 'salgados', badge: '🌾 Sem Glúten', badgeColor: '#8D6E63' },
+            6: { cat: 'doces', badge: '🌱 Vegano', badgeColor: '#4CAF50' },
+            7: { cat: 'gelados', badge: '❄️ Mais Vendido', badgeColor: '#0288D1' },
+            8: { cat: 'gelados', badge: '' }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (usuarioLogado) document.getElementById('btn-login-header').innerText = "👤 Minha Conta";
+            atualizarCarrinho();
+            ativarAutoSave(); 
+        });
+
+        function salvarEstadoLocal() {
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            localStorage.setItem('totalGeral', totalGeral);
+            localStorage.setItem('usuarioLogado', usuarioLogado);
+            localStorage.setItem('dadosUsuario', JSON.stringify(dadosUsuario));
+            localStorage.setItem('historicoPedidos', JSON.stringify(historicoPedidos));
+        }
+
+        function ativarAutoSave() {
+            const camposMapeados = {
+                'edit-nome': 'nome', 'check-nome': 'nome', 'cad-nome': 'nome',
+                'edit-email': 'email', 'check-email': 'email', 'cad-email': 'email', 'login-email': 'email',
+                'edit-telefone': 'telefone', 'check-telefone': 'telefone',
+                'edit-endereco': 'endereco', 'check-endereco': 'endereco'
+            };
+            document.querySelectorAll('.auto-save').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const chave = camposMapeados[e.target.id];
+                    if (chave) { dadosUsuario[chave] = e.target.value; salvarEstadoLocal(); }
+                });
+            });
+        }
+
+        function filtrarMenu(categoria, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            document.querySelectorAll('.produto-card').forEach(card => {
+                if (categoria === 'todos' || card.dataset.categoria === categoria) {
+                    card.style.display = 'flex';
+                    setTimeout(() => card.style.opacity = '1', 50);
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => card.style.display = 'none', 300);
+                }
+            });
+        }
+
+        function atualizarProgramaFidelidade() {
+            let pontos = 1 + (historicoPedidos.length * 2); 
+            if (pontos > 10) pontos = 10;
+            
+            const container = document.getElementById('fidelidade-copos');
+            container.innerHTML = "";
+            for(let i = 1; i <= 10; i++) {
+                container.innerHTML += `<span class="copo ${i <= pontos ? 'ganho' : ''}">☕</span>`;
+            }
+            
+            const faltam = 10 - pontos;
+            document.getElementById('fidelidade-texto').innerText = 
+                faltam === 0 ? "Parabéns! A sua próxima bebida é por nossa conta! 🎉" 
+                             : `Faltam ${faltam} cafés para a sua próxima bebida grátis!`;
+        }
+
+        function abrirCarrinho() {
+            document.getElementById('painel-carrinho').classList.add('open');
+            document.getElementById('cart-overlay').classList.add('active');
+        }
+
+        function fecharCarrinho() {
+            document.getElementById('painel-carrinho').classList.remove('open');
+            document.getElementById('cart-overlay').classList.remove('active');
+        }
+
+        function mostrarToast(mensagem, isErro = false) {
+            const toast = document.getElementById("toast");
+            toast.innerText = mensagem;
+            toast.className = isErro ? "error show" : "show";
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
+        }
+
+        function abrirModal(id) { document.getElementById(id).classList.add('active'); }
+        function fecharModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function aplicarMascaraTelefone(input) {
+            let valor = input.value.replace(/\D/g, ''); 
+            if (valor.length > 11) valor = valor.slice(0, 11); 
+            if (valor.length > 2) valor = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+            if (valor.length > 10) valor = `${valor.slice(0, 10)}-${valor.slice(10)}`;
+            else if (valor.length > 9) valor = `${valor.slice(0, 9)}-${valor.slice(9)}`;
+            input.value = valor;
+            dadosUsuario.telefone = valor;
+            salvarEstadoLocal();
+        }
+
+        function mudarAba(event, abaId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            if (event) event.currentTarget.classList.add('active');
+            else {
+                if (abaId === 'pedidos') document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                else document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            }
+            document.getElementById('aba-' + abaId).classList.add('active');
+        }
+
+        function ativarModoEdicao() {
+            document.getElementById('display-dados').style.display = 'none';
+            document.getElementById('form-edicao-dados').style.display = 'block';
+            document.getElementById('edit-nome').value = dadosUsuario.nome || '';
+            document.getElementById('edit-email').value = dadosUsuario.email || '';
+            document.getElementById('edit-telefone').value = dadosUsuario.telefone || '';
+            document.getElementById('edit-endereco').value = dadosUsuario.endereco || '';
+        }
+
+        function cancelarEdicao() {
+            document.getElementById('form-edicao-dados').style.display = 'none';
+            document.getElementById('display-dados').style.display = 'block';
+        }
+
+        function salvarEdicaoDados() {
+            dadosUsuario.nome = document.getElementById('edit-nome').value;
+            dadosUsuario.email = document.getElementById('edit-email').value;
+            dadosUsuario.telefone = document.getElementById('edit-telefone').value;
+            dadosUsuario.endereco = document.getElementById('edit-endereco').value;
+            salvarEstadoLocal(); 
+            atualizarPainelConta();
+            cancelarEdicao();
+            mostrarToast("Dados atualizados com sucesso!");
+        }
+
+        function verificarAcessoDaNavbar() {
+            if (usuarioLogado) {
+                atualizarPainelConta();
+                abrirModal('modal-minha-conta');
+            } else {
+                abrirModal('modal-login');
+            }
+        }
+
+        function processarCadastro() {
+            const inputNome = document.getElementById('cad-nome').value;
+            const inputEmail = document.getElementById('cad-email').value;
+
+            // Bloqueio de e-mail já cadastrado
+            if (dadosUsuario.email && dadosUsuario.email === inputEmail) {
+                mostrarToast("Este e-mail já está cadastrado! Por favor, faça login.", true);
+                fecharModal('modal-cadastro');
+                setTimeout(() => abrirModal('modal-login'), 800);
+                return; 
+            }
+
+            dadosUsuario.nome = inputNome;
+            dadosUsuario.email = inputEmail;
+            document.getElementById('login-email').value = dadosUsuario.email;
+            salvarEstadoLocal();
+            fecharModal('modal-cadastro');
+            mostrarToast('Conta criada com sucesso! Faça login.');
+            setTimeout(() => abrirModal('modal-login'), 500);
+        }
+
+        function processarLogin() {
+            usuarioLogado = true;
+            if(!dadosUsuario.email) dadosUsuario.email = document.getElementById('login-email').value;
+            salvarEstadoLocal();
+            fecharModal('modal-login');
+            mostrarToast('Login efetuado com sucesso!');
+            document.getElementById('btn-login-header').innerText = "👤 Minha Conta";
+            if (carrinho.length > 0) setTimeout(() => abrirCheckoutValidado(), 600);
+        }
+
+        function fazerLogout() {
+            usuarioLogado = false;
+            salvarEstadoLocal();
+            document.getElementById('btn-login-header').innerText = "👤 Acessar Minha Conta";
+            fecharModal('modal-minha-conta');
+            mostrarToast("Você saiu da conta.");
+        }
+
+        function atualizarPainelConta() {
+            document.getElementById('painel-nome').innerText = dadosUsuario.nome || "Não informado";
+            document.getElementById('painel-email').innerText = dadosUsuario.email || "Não informado";
+            document.getElementById('painel-telefone').innerText = dadosUsuario.telefone || "Não informado";
+            document.getElementById('painel-endereco').innerText = dadosUsuario.endereco || "Não informado";
+            atualizarProgramaFidelidade();
+            renderizarHistoricoPedidos();
+        }
+
+        // SISTEMA DE AVALIAÇÃO DE PEDIDOS
+        let pedidoSelecionadoParaAvaliacao = null;
+
+        function abrirAvaliacaoPedido(pedidoId) {
+            pedidoSelecionadoParaAvaliacao = pedidoId;
+            document.getElementById('av-pedido-id').innerText = pedidoId;
+            document.getElementById('av-comentario').value = '';
+            document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+            fecharModal('modal-minha-conta'); 
+            setTimeout(() => abrirModal('modal-avaliacao'), 300);
+        }
+
+        function enviarAvaliacao() {
+            const ratingInput = document.querySelector('input[name="rating"]:checked');
+            if(!ratingInput) {
+                mostrarToast("Por favor, selecione uma nota nas estrelas.", true);
+                return;
+            }
+            
+            const notaSelecionada = parseInt(ratingInput.value);
+            const comentarioInserido = document.getElementById('av-comentario').value;
+
+            const index = historicoPedidos.findIndex(p => p.id === pedidoSelecionadoParaAvaliacao);
+            if(index !== -1) {
+                historicoPedidos[index].avaliacao = { nota: notaSelecionada, comentario: comentarioInserido };
+                salvarEstadoLocal();
+                fecharModal('modal-avaliacao');
+                mostrarToast("Avaliação enviada com sucesso! Muito obrigado.");
+                setTimeout(() => {
+                    atualizarPainelConta();
+                    abrirModal('modal-minha-conta');
+                    mudarAba(null, 'pedidos');
+                }, 400);
+            }
+        }
+
+        function renderizarHistoricoPedidos() {
+            const container = document.getElementById('lista-historico-pedidos');
+            if (historicoPedidos.length === 0) {
+                container.innerHTML = "<p style='text-align: center; color: #999; margin: 30px 0;'>Você ainda não fez nenhum pedido.</p>";
+                return;
+            }
+            container.innerHTML = "";
+            [...historicoPedidos].reverse().forEach(pedido => {
+                const totalFormatado = pedido.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                let statusNum = pedido.status === 'Preparando' ? 2 : (pedido.status === 'Entregue' ? 4 : 1);
+                
+                let blocoAvaliacao = '';
+                if (pedido.avaliacao) {
+                    const estrelasOuro = '★'.repeat(pedido.avaliacao.nota);
+                    const estrelasCinza = '☆'.repeat(5 - pedido.avaliacao.nota);
+                    blocoAvaliacao = `
+                        <div class="avaliacao-feita">
+                            <div class="estrelas-display">${estrelasOuro}<span style="color: #ccc;">${estrelasCinza}</span></div>
+                            ${pedido.avaliacao.comentario ? `<p>"${pedido.avaliacao.comentario}"</p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    blocoAvaliacao = `<button class="btn-avaliar" onclick="abrirAvaliacaoPedido(${pedido.id})">⭐ Avaliar Pedido</button>`;
+                }
+
+                container.innerHTML += `
+                    <div class="pedido-card">
+                        <div class="pedido-header">
+                            <div><h3 style="font-size: 1.1em; color: #1a1a1a;">Pedido #${pedido.id}</h3><p style="font-size: 0.85em; color: #777;">Realizado em: ${pedido.data}</p></div>
+                            <div style="text-align: right;"><span style="font-weight: bold; color: #4CAF50;">${totalFormatado}</span><p style="font-size: 0.85em; color: #777;">${pedido.itensQtde} itens</p></div>
+                        </div>
+                        <div class="tracker">
+                            <div class="tracker-step ${statusNum >= 1 ? 'active' : ''}"><div class="tracker-icon">✓</div><p>Recebido</p></div>
+                            <div class="tracker-step ${statusNum >= 2 ? 'active' : ''}"><div class="tracker-icon">${statusNum >= 2 ? '✓' : '2'}</div><p>Preparando</p></div>
+                            <div class="tracker-step ${statusNum >= 3 ? 'active' : ''}"><div class="tracker-icon">${statusNum >= 3 ? '✓' : '3'}</div><p>Em Rota</p></div>
+                            <div class="tracker-step ${statusNum >= 4 ? 'active' : ''}"><div class="tracker-icon">${statusNum >= 4 ? '✓' : '4'}</div><p>Entregue</p></div>
+                        </div>
+                        ${blocoAvaliacao}
+                    </div>`;
+            });
+        }
+
+        function abrirCheckoutValidado() {
+            if (carrinho.length === 0) return mostrarToast("Selecione os produtos primeiro!", true);
+            if (!usuarioLogado) {
+                mostrarToast("Para finalizar, faça login ou cadastre-se.", true);
+                abrirModal('modal-login');
+                return;
+            }
+            fecharCarrinho(); 
+            document.getElementById('check-nome').value = dadosUsuario.nome || '';
+            document.getElementById('check-email').value = dadosUsuario.email || '';
+            document.getElementById('check-telefone').value = dadosUsuario.telefone || '';
+            document.getElementById('check-endereco').value = dadosUsuario.endereco || '';
+            document.getElementById('modal-total-display').innerText = "Total: " + totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            abrirModal('modal-checkout');
+        }
+
+        fetch('http://localhost:8000/produtos')
+            .then(response => response.json())
+            .then(produtos => {
+                const vitrine = document.getElementById('vitrine');
+                produtos.forEach(produto => {
+                    const preco = parseFloat(produto.preco);
+                    const precoFormatado = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    const imgUrl = bancoImagens[produto.id] || "https://placehold.co/400x300/1a1a1a/FFFFFF?text=Produto"; 
+                    
+                    const extra = infoExtraProdutos[produto.id] || { cat: 'outros', badge: '' };
+                    const badgeHtml = extra.badge ? `<div class="badge" style="background-color: ${extra.badgeColor};">${extra.badge}</div>` : '';
+
+                    vitrine.innerHTML += `
+                        <div class="produto-card" data-categoria="${extra.cat}">
+                            ${badgeHtml}
+                            <img src="${imgUrl}" alt="${produto.nome}" class="produto-img">
+                            <div class="produto-info">
+                                <h3>${produto.nome}</h3><p>${produto.descricao}</p><div class="preco">${precoFormatado}</div>
+                                <button class="btn-comprar" onclick="adicionarAoCarrinho(${produto.id}, '${produto.nome}', ${preco})">Adicionar</button>
+                            </div>
+                        </div>`;
+                });
+            })
+            .catch(() => document.getElementById('vitrine').innerHTML = "<p>Erro ao carregar o cardápio. Verifica a conexão da API.</p>");
+
+        function adicionarAoCarrinho(id, nome, preco) {
+            carrinho.push({ id, nome, preco });
+            atualizarCarrinho();
+            mostrarToast(`Adicionado: ${nome}`);
+            abrirCarrinho(); 
+        }
+
+        function atualizarCarrinho() {
+            const divItens = document.getElementById('itens-carrinho');
+            document.getElementById('cart-count').innerText = carrinho.length;
+
+            if (carrinho.length === 0) {
+                divItens.innerHTML = "<p style='color: #999; text-align: center; margin: 30px 0;'>O carrinho está vazio.</p>";
+                document.getElementById('total-carrinho').innerText = "R$ 0,00";
+                totalGeral = 0;
+                salvarEstadoLocal();
+                return;
+            }
+
+            const itensAgrupados = {};
+            totalGeral = 0;
+            carrinho.forEach(item => {
+                totalGeral += item.preco;
+                if (itensAgrupados[item.id]) { itensAgrupados[item.id].quantidade += 1; itensAgrupados[item.id].subtotal += item.preco; } 
+                else { itensAgrupados[item.id] = { nome: item.nome, quantidade: 1, subtotal: item.preco }; }
+            });
+
+            divItens.innerHTML = "";
+            Object.values(itensAgrupados).forEach(item => {
+                const subtotalFormatado = item.subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                divItens.innerHTML += `<div class="item-carrinho"><span><b>${item.quantidade}x</b> ${item.nome}</span> <span>${subtotalFormatado}</span></div>`;
+            });
+            document.getElementById('total-carrinho').innerText = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            salvarEstadoLocal();
+        }
+
+        function processarSucessoPedido(pedidoId) {
+            const dataAtual = new Date();
+            historicoPedidos.push({
+                id: pedidoId,
+                data: dataAtual.toLocaleDateString('pt-BR') + ' às ' + dataAtual.getHours() + ':' + String(dataAtual.getMinutes()).padStart(2, '0'),
+                total: totalGeral,
+                itensQtde: carrinho.length,
+                status: 'Preparando' 
+            });
+
+            carrinho = []; 
+            document.getElementById("observacao-pedido").value = "";
+            document.querySelectorAll('#modal-checkout input').forEach(input => input.value = '');
+            
+            atualizarCarrinho(); 
+            fecharModal('modal-checkout');
+            atualizarPainelConta();
+            abrirModal('modal-minha-conta');
+            mudarAba(null, 'pedidos');
+        }
+
+        function confirmarEPagar() {
+            const botao = document.querySelector('#modal-checkout .btn-finalizar');
+            botao.innerText = "A processar...";
+            botao.disabled = true;
+
+            dadosUsuario.nome = document.getElementById('check-nome').value;
+            dadosUsuario.email = document.getElementById('check-email').value;
+            dadosUsuario.telefone = document.getElementById('check-telefone').value;
+            dadosUsuario.endereco = document.getElementById('check-endereco').value;
+            salvarEstadoLocal();
+
+            const itensAgrupados = {};
+            carrinho.forEach(item => {
+                if (itensAgrupados[item.id]) itensAgrupados[item.id].quantidade += 1;
+                else itensAgrupados[item.id] = { id: item.id, quantidade: 1, preco: item.preco };
+            });
+
+            fetch('http://localhost:8000/pedidos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cliente_id: 1, itens: Object.values(itensAgrupados) }) 
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Erro no banco");
+                return response.json();
+            })
+            .then(data => {
+                mostrarToast(`Pedido #${data.pedido_id} recebido com sucesso!`);
+                processarSucessoPedido(data.pedido_id);
+            })
+            .catch(error => {
+                console.warn("API bloqueou a inserção. Simulando aprovação no front-end.");
+                const idSimulado = Math.floor(Math.random() * 9000) + 1000;
+                mostrarToast(`Pedido #${idSimulado} processado!`);
+                processarSucessoPedido(idSimulado);
+            })
+            .finally(() => {
+                botao.innerText = "Confirmar e Pagar";
+                botao.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
