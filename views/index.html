@@ -722,7 +722,7 @@
             abrirModal('modal-checkout');
         }
 
-        fetch('http://localhost:8000/produtos')
+        fetch('https://api-cafeteria-gourmet.onrender.com/produtos')
             .then(response => response.json())
             .then(produtos => {
                 const vitrine = document.getElementById('vitrine');
@@ -821,7 +821,7 @@
                 else itensAgrupados[item.id] = { id: item.id, quantidade: 1, preco: item.preco };
             });
 
-            fetch('http://localhost:8000/pedidos', {
+            fetch('https://api-cafeteria-gourmet.onrender.com/pedidos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ cliente_id: 1, itens: Object.values(itensAgrupados) }) 
