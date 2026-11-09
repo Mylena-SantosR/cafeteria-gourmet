@@ -1,0 +1,32 @@
+/* PIT II — visualização dos itens de pedidos já realizados */
+#lista-historico-pedidos .ux-order-card {margin-bottom:20px;border:1px solid #e7e4df;border-radius:12px;padding:24px;background:white}
+#lista-historico-pedidos .ux-order-card .pedido-header{gap:12px;display:flex;align-items:start;justify-content:space-between}
+.ux-order-card .pedido-header h3{font-size:1.12rem;margin:0 0 5px;color:#1a1a1a}
+.ux-order-date,.ux-order-totals p{color:#747474;font-size:.9rem;margin:0}
+.ux-order-totals{text-align:right;white-space:nowrap}
+.ux-order-value{color:#2a8540;font-size:1.1rem}
+.ux-order-details{border:1px solid #d6e2d6;border-radius:10px;margin:16px 0;background:#fbfdfb;overflow:hidden}
+.ux-order-details summary{padding:13px 16px;cursor:pointer;user-select:none;color:#27663b;font-weight:700;list-style-position:inside}
+.ux-order-details summary:focus-visible{outline:3px solid #b1e1bd;outline-offset:-3px}
+.ux-order-details[open] summary{border-bottom:1px solid #d6e2d6;background:#f0f8f1}
+.ux-order-details-body{padding:14px 16px}
+.ux-order-subheading{font-size:.98rem;margin:2px 0 10px}
+.ux-order-items{list-style:none;padding:0;margin:0}
+.ux-order-item{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #ececec}
+.ux-order-item:last-child{border-bottom:0}
+.ux-order-item-description{min-width:0;flex:1;overflow-wrap:anywhere}
+.ux-order-item-description strong{display:block;font-weight:650;font-size:.94rem}
+.ux-order-item-description small{display:block;color:#707070;margin-top:4px}
+.ux-order-item-total{white-space:nowrap;font-size:.95rem}
+.ux-order-detail-note,.ux-order-legacy,.ux-order-status-note,.ux-order-review-pending{font-size:.82rem;color:#777;line-height:1.5}
+.ux-order-status-note{margin:14px 0 5px}
+.ux-order-legacy{margin:0}
+.ux-order-review-pending{margin:12px 0 0}
+.ux-order-empty{text-align:center;color:#888;padding:28px}
+.ux-order-review{margin-top:12px}
+@media(max-width:600px){
+  #lista-historico-pedidos .ux-order-card{padding:15px}
+  .ux-order-card .pedido-header{flex-wrap:wrap}
+  .ux-order-totals{font-size:.9rem}
+  .ux-order-item{align-items:flex-start}
+}

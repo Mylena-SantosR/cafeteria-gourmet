@@ -1,0 +1,62 @@
+/* Cafeteria Gourmet - ciclo de melhorias de UX - PIT II */
+.ux-busca {max-width:660px;margin:0 auto 22px;display:flex;flex-direction:column;gap:8px}
+.ux-busca label {font-size:.95rem;color:#333;font-weight:600}
+.ux-busca input {width:100%;border:1px solid #b8b3ac;border-radius:12px;padding:14px 16px;font:inherit;background:#fff;color:#292929;box-shadow:0 2px 12px rgba(0,0,0,.03)}
+.ux-busca input:focus, .ux-btn:focus-visible,.ux-qty-btn:focus-visible,.ux-details-close:focus-visible {outline:3px solid #a8d5ad;outline-offset:2px}
+.ux-contador-busca {text-align:center;font-size:.85rem;color:#666;min-height:1.35em;margin-bottom:15px}
+.ux-nenhum {padding:25px;text-align:center;border:1px dashed #bbb;border-radius:10px;color:#555;background:#fff;margin-top:15px}
+.ux-btn {font:inherit;cursor:pointer;border:1px solid #276637;background:#fff;color:#276637;padding:10px 14px;border-radius:7px;font-weight:600;transition:background .2s}
+.ux-btn:hover {background:#eaf7ec}
+.ux-detalhes-btn {margin-top:10px;width:100%}
+.ux-qty-row {display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%}
+.ux-qty-description {flex:1;min-width:0}
+.ux-qty-description strong {display:block;font-size:.9rem;overflow-wrap:anywhere}
+.ux-qty-description small {display:block;color:#656565;margin-top:4px}
+.ux-qty-controls {display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ux-qty-btn {border:1px solid #ccc;background:#fff;border-radius:7px;min-width:32px;min-height:32px;font:inherit;cursor:pointer}
+.ux-qty-btn:hover {background:#f1f7f2}
+.ux-qty-count {min-width:22px;text-align:center;font-size:.95rem;font-weight:600}
+.ux-remove {color:#a33924;border-color:#e7b9ad}
+.ux-clear {width:100%;padding:9px 12px;margin-top:8px;background:#fff;color:#954323;border:1px solid #d4aca0;border-radius:7px;cursor:pointer;font:inherit}
+.ux-shelf {padding:55px 20px 70px;background:#fff}
+.ux-shelf-inner {max-width:1200px;margin:0 auto}
+.ux-shelf-kicker {text-align:center;color:#44704a;font-size:.85rem;letter-spacing:.12em;font-weight:700;text-transform:uppercase}
+.ux-shelf p.ux-shelf-subtitle {color:#6d655d;text-align:center;margin:-12px 0 35px}
+.ux-shelf-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.ux-shelf .produto-card {border:1px solid #eee}
+.ux-shelf .produto-info {padding:18px}
+.ux-shelf .produto-img {height:180px}
+.ux-details-modal {position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.76);padding:16px}
+.ux-details-modal.open {display:flex}
+.ux-details-panel {background:#fff;width:min(790px,100%);max-height:90vh;overflow:auto;border-radius:16px;position:relative;box-shadow:0 18px 70px rgba(0,0,0,.25);display:grid;grid-template-columns:1fr 1fr}
+.ux-details-photo {width:100%;height:100%;min-height:320px;max-height:620px;object-fit:cover;background:#eee}
+.ux-details-body {padding:36px 28px}
+.ux-details-body h2 {font-size:1.7rem;color:#1a1a1a;margin:0 0 12px}
+.ux-details-body p {color:#5f5f5f;line-height:1.6;margin:0 0 15px}
+.ux-details-body .ux-price {color:#2b783b;font-weight:700;font-size:1.6rem;margin:8px 0 18px}
+.ux-details-body dl {border-top:1px solid #ddd;margin-top:10px;padding-top:14px}
+.ux-details-body dt {font-weight:700;margin:11px 0 4px}
+.ux-details-body dd {color:#555;line-height:1.55;margin:0}
+.ux-details-close {position:absolute;right:14px;top:12px;z-index:2;border:0;border-radius:99px;width:36px;height:36px;background:#fff;font-size:1.5rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.ux-shipping {margin:17px 0;padding:18px 18px 16px;border:1px solid #d7e6d7;background:#f4faf4;border-radius:10px;text-align:left}
+.ux-shipping h4 {color:#22552e;margin:0 0 8px;font-size:1rem}
+.ux-shipping p {color:#4e604e;font-size:.88rem;line-height:1.6;margin-bottom:7px}
+.ux-shipping .ux-disclaimer {font-size:.8rem;color:#6b624d;margin:10px 0 0}
+.ux-demo-auth {margin:10px 0;padding:10px;border:1px solid #eadac0;background:#fff8ea;border-radius:8px;font-size:.84rem;color:#684923}
+@media (max-width:750px) {
+ .ux-shelf-grid {grid-template-columns:1fr;max-width:380px;margin:auto}
+ .ux-details-panel {grid-template-columns:1fr}
+ .ux-details-photo {height:230px;min-height:0}
+ .ux-details-body {padding:24px 18px}
+ .painel-carrinho {width:min(420px,100vw);right:-100vw;padding:22px}
+ .ux-qty-row {gap:6px}
+ .ux-qty-controls {gap:3px}
+}
+
+/* Variações do Café Gourmet Premium */
+#vitrine .produto-card[data-ux-variante-oculta="1"]{display:none!important}
+.ux-premium-escolha{padding:12px 0 16px;border-block:1px solid #e9e1d9;margin-bottom:10px}
+.ux-premium-escolha label{display:block;font-weight:700;font-size:.9rem;margin-bottom:8px}
+.ux-premium-escolha select{width:100%;min-height:44px}
+.ux-premium-escolha .ux-disclaimer{font-size:.8rem;margin:8px 0 0}
+#ux-detail-comprar:disabled{opacity:.5;cursor:not-allowed}

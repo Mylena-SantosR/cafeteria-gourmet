@@ -1,0 +1,6 @@
+/* Checkout API local: resumo da entrega e histórico de demonstração */
+.ux-api-mensagem {margin:10px 0 0;font-size:.85rem;color:#345d3a;line-height:1.45}
+.ux-api-mensagem.erro {color:#aa281e;font-weight:600}
+.ux-checkout-historico {border-top:1px solid #d6e3d6;margin-top:12px;padding-top:12px}
+.ux-checkout-historico h4 {margin:0 0 8px;color:#22552e;font-size:.95rem}
+.ux-checkout-historico p {margin:3px 0;font-size:.86rem;color:#555}
